@@ -19,6 +19,7 @@ import java.util.List;
 
 @Dependent
 @Transactional
+@SuppressWarnings("unchecked")
 public class DepartmentService {
 
     @PersistenceContext(unitName = "EmpDeptSys")

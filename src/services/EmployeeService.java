@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 @Dependent
 @Transactional
+@SuppressWarnings("unchecked")
 public class EmployeeService {
 
     @PersistenceContext(unitName = "EmpDeptSys")

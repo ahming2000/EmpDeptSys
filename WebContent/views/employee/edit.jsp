@@ -4,7 +4,7 @@
 <%@ page import="java.util.ArrayList" %>
 <% App app = (App) request.getAttribute("app"); %>
 <% Employee employee = (Employee) app.get("employee"); %>
-<% ArrayList<Department> departments = (ArrayList<Department>) app.get("departments"); %>
+<% @SuppressWarnings("unchecked") ArrayList<Department> departments = (ArrayList<Department>) app.get("departments"); %>
 
 <div class="container" id="app">
     <div class="row">

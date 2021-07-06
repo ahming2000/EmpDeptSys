@@ -3,8 +3,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="models.Employee" %>
 <% App app = (App) request.getAttribute("app"); %>
-<% ArrayList<Department> departments = (ArrayList<Department>) app.get("departments"); %>
-<% ArrayList<Employee> employees = (ArrayList<Employee>) app.get("employees"); %>
+<% @SuppressWarnings("unchecked") ArrayList<Department> departments = (ArrayList<Department>) app.get("departments"); %>
+<% @SuppressWarnings("unchecked") ArrayList<Employee> employees = (ArrayList<Employee>) app.get("employees"); %>
 
 <div class="container" id="app">
 
