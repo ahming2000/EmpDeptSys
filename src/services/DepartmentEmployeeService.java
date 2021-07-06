@@ -20,6 +20,7 @@ import java.util.Calendar;
 
 @Dependent
 @Transactional
+@SuppressWarnings("unchecked")
 public class DepartmentEmployeeService {
 
     @PersistenceContext(unitName = "EmpDeptSys")
@@ -107,8 +108,9 @@ public class DepartmentEmployeeService {
         try {
             java.util.Date date = new java.util.Date();
             de.setFromDate(new java.sql.Date(date.getTime()));
-            date = new java.util.Date(8099, Calendar.JANUARY, 1);
-            de.setToDate(new java.sql.Date(date.getTime()));
+            Calendar calender = Calendar.getInstance();
+            calender.set(8099, Calendar.JANUARY, 1);
+            de.setToDate(new java.sql.Date(calender.getTime().getTime()));
         } catch (Exception ignored){}
         de.setId(dePK);
 
