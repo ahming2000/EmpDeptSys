@@ -35,8 +35,8 @@ public class IndexController extends HttpServlet {
         // Get parameter value
         int page = app.param("page", 1);
         int paginate = app.param("paginate", 100);
-        String search = request.getParameter("search") == null ? "" : request.getParameter("search");
-        String department = request.getParameter("department") == null ? "" : request.getParameter("department");
+        String search = app.param("search", "");
+        String department = app.param("department", "");
 
         // Get total employee count
         app.set("totalEmpCount", eService.getEmployeeCount());
