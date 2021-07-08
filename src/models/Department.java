@@ -27,10 +27,6 @@ public class Department implements Serializable {
     @OneToMany(mappedBy = "department")
     private List<DepartmentEmployee> departmentEmployees;
 
-    //bi-directional many-to-one association to DepartmentManager
-    @OneToMany(mappedBy = "department")
-    private List<DepartmentManager> departmentManagers;
-
     public Department() {
     }
 
@@ -70,28 +66,6 @@ public class Department implements Serializable {
         departmentEmployee.setDepartment(null);
 
         return departmentEmployee;
-    }
-
-    public List<DepartmentManager> getDepartmentManagers() {
-        return this.departmentManagers;
-    }
-
-    public void setDepartmentManagers(List<DepartmentManager> departmentManagers) {
-        this.departmentManagers = departmentManagers;
-    }
-
-    public DepartmentManager addDepartmentManager(DepartmentManager departmentManager) {
-        getDepartmentManagers().add(departmentManager);
-        departmentManager.setDepartment(this);
-
-        return departmentManager;
-    }
-
-    public DepartmentManager removeDepartmentManager(DepartmentManager departmentManager) {
-        getDepartmentManagers().remove(departmentManager);
-        departmentManager.setDepartment(null);
-
-        return departmentManager;
     }
 
 }
