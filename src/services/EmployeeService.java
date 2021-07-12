@@ -104,18 +104,7 @@ public class EmployeeService {
         em.persist(employee);
     }
 
-    public void updateEmployee(String id, String firstName, String lastName, String gender, String birthDate){
-        Employee employee = getEmployee(id);
-
-        employee.setFirstName(firstName);
-        employee.setLastName(lastName);
-        employee.setGender(gender);
-
-        try {
-            java.util.Date dob = new SimpleDateFormat("yyyy-MM-dd").parse(birthDate);
-            employee.setBirthDate(new java.sql.Date(dob.getTime()));
-        } catch (Exception ignored){}
-
+    public void updateEmployee(Employee employee){
         em.merge(employee);
     }
 

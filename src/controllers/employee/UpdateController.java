@@ -73,14 +73,19 @@ public class UpdateController extends HttpServlet {
                 if (!app.hasError()) app.validator().maxCharacter(new String[]{"last_name"}, 16);
 
                 if(!app.hasError()){
-                    // Get parameters
-                    String firstName = request.getParameter("first_name");
-                    String lastName = request.getParameter("last_name");
-                    String gender = request.getParameter("gender");
-                    String birthDate = request.getParameter("birth_date");
+                    Employee employee = eService.getEmployee(empId);
+
+                    employee.setFirstName(request.getParameter("first_name"));
+                    employee.setLastName(request.getParameter("last_name"));
+                    employee.setGender(request.getParameter("gender"));
+
+                    try {
+                        java.util.Date dob = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birth_date"));
+                        employee.setBirthDate(new java.sql.Date(dob.getTime()));
+                    } catch (Exception ignored){}
 
                     // Update employee
-                    eService.updateEmployee(empId, firstName, lastName, gender, birthDate);
+                    eService.updateEmployee(employee);
 
                     // Set successful message
                     app.setSession("message", "Update profile successfully!");
