@@ -34,11 +34,11 @@ public class EmployeeService {
             q.setParameter("paginate", paginate);
             ArrayList<BigInteger> ids = (ArrayList<BigInteger>) q.getResultList();
             
-            String idsStr = implodeId(ids, ", ");
+            String idsStr = implodeEmployeeId(ids);
             if (idsStr.equals("")){
                 return new ArrayList<>();
             } else {
-                q = em.createNativeQuery("SELECT * FROM employees.employee e WHERE e.id IN (" + implodeId(ids, ", ") + ")", Employee.class);
+                q = em.createNativeQuery("SELECT * FROM employees.employee e WHERE e.id IN (" + implodeEmployeeId(ids) + ")", Employee.class);
                 return (ArrayList<Employee>) q.getResultList();
             }
         } catch (NoResultException exception) {
@@ -46,13 +46,13 @@ public class EmployeeService {
         }
     }
 
-    private String implodeId(ArrayList<BigInteger> arrayList, String joinElement){
+    private String implodeEmployeeId(ArrayList<BigInteger> arrayList){
         ArrayList<String> list = new ArrayList<>();
         for (BigInteger i: arrayList){
             list.add(String.valueOf(i));
         }
 
-        return String.join(joinElement, list);
+        return String.join(", ", list);
     }
 
     public Employee getEmployee(String id) {

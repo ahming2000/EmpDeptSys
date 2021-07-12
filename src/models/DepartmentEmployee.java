@@ -12,8 +12,8 @@ import java.util.Date;
 @Table(name = "department_employee", schema = "employees")
 @NamedQueries({
         @NamedQuery(name = "DepartmentEmployee.all", query = "SELECT de FROM DepartmentEmployee de"),
-        @NamedQuery(name = "DepartmentEmployee.find.empId", query = "SELECT de FROM DepartmentEmployee de WHERE de.id.employeeId = :employeeId"),
-        @NamedQuery(name = "DepartmentEmployee.find.empId.deptId", query = "SELECT de FROM DepartmentEmployee de WHERE de.id.employeeId = :employeeId AND de.id.departmentId = :departmentId"),
+        @NamedQuery(name = "DepartmentEmployee.find.empId", query = "SELECT de FROM DepartmentEmployee de WHERE de.id.employeeId = :employee_id"),
+        @NamedQuery(name = "DepartmentEmployee.find.empId.deptId", query = "SELECT de FROM DepartmentEmployee de WHERE de.id.employeeId = :employee_id AND de.id.departmentId = :department_id"),
 })
 public class DepartmentEmployee implements Serializable {
     private static final long serialVersionUID = 1L;

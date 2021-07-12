@@ -34,7 +34,7 @@ public class DepartmentEmployeeService {
     public ArrayList<DepartmentEmployee> getDepartmentsInvolved(String employee_id) {
         try {
             Query q = em.createNamedQuery("DepartmentEmployee.find.empId");
-            q.setParameter("employeeId", Long.parseLong(employee_id));
+            q.setParameter("employee_id", Long.parseLong(employee_id));
             return (ArrayList<DepartmentEmployee>) q.getResultList();
         } catch (NoResultException exception) {
             return new ArrayList<>();
@@ -42,17 +42,17 @@ public class DepartmentEmployeeService {
     }
 
     public boolean isDuplicated(String employee_id, String department_id){
-        long empId;
+        long employee_id_long;
         try{
-            empId = Long.parseLong(employee_id);
+            employee_id_long = Long.parseLong(employee_id);
         } catch (NumberFormatException exception){
             return true;
         }
 
         try {
             Query q = em.createNamedQuery("DepartmentEmployee.find.empId.deptId");
-            q.setParameter("employeeId", empId);
-            q.setParameter("departmentId", department_id);
+            q.setParameter("employee_id", employee_id_long);
+            q.setParameter("department_id", department_id);
             q.getSingleResult();
             return true;
         } catch (NoResultException exception){
@@ -60,10 +60,10 @@ public class DepartmentEmployeeService {
         }
     }
 
-    public int getEmployeeCount(String departmentId){
+    public int getEmployeeCount(String department_id){
         try {
-            Query q = em.createNativeQuery("SELECT DISTINCT COUNT(de.employee_id) AS count FROM employees.department_employee de WHERE de.department_id = :departmentId");
-            q.setParameter("departmentId", departmentId);
+            Query q = em.createNativeQuery("SELECT DISTINCT COUNT(de.employee_id) AS count FROM employees.department_employee de WHERE de.department_id = :department_id");
+            q.setParameter("department_id", department_id);
             return ((BigInteger) q.getSingleResult()).intValue();
         } catch (NoResultException exception){
             return 0;
@@ -108,8 +108,9 @@ public class DepartmentEmployeeService {
         try {
             java.util.Date date = new java.util.Date();
             de.setFromDate(new java.sql.Date(date.getTime()));
+
             Calendar calender = Calendar.getInstance();
-            calender.set(8099, Calendar.JANUARY, 1);
+            calender.set(8099, Calendar.JANUARY, 1); // 9999 - 1900 = 8099
             de.setToDate(new java.sql.Date(calender.getTime().getTime()));
         } catch (Exception ignored){}
         de.setId(dePK);
@@ -117,11 +118,11 @@ public class DepartmentEmployeeService {
         em.persist(de);
     }
 
-    public void updateDepartmentEmployee(String employee_id, String toDate){
+    public void updateDepartmentEmployee(String employee_id, String to_date){
         DepartmentEmployee de = getCurrentDepartmentEmployee(employee_id);
 
         try {
-            java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(toDate);
+            java.util.Date date = new SimpleDateFormat("yyyy-MM-dd").parse(to_date);
             de.setToDate(new java.sql.Date(date.getTime()));
         } catch (Exception ignored){}
 
