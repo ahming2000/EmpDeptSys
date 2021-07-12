@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 @WebServlet("/employee/create")
 public class CreateController extends HttpServlet {
@@ -48,16 +49,22 @@ public class CreateController extends HttpServlet {
 
 		// Perform create
 		if (!app.hasError()){
-			// Get parameters
-			String firstName = request.getParameter("first_name");
-			String lastName = request.getParameter("last_name");
-			String gender = request.getParameter("gender");
-			String birthDate = request.getParameter("birth_date");
-			String hireDate = request.getParameter("hire_date");
-
-			// Create new employee
-			Employee employee = eService.addEmployee(firstName, lastName, gender, birthDate, hireDate); // Add employee
+			Employee employee = new Employee();
 			Department department = dService.getDepartment(request.getParameter("dept_id")); // Fetch department class
+
+			employee.setFirstName(request.getParameter("first_name"));
+			employee.setLastName(request.getParameter("last_name"));
+			employee.setGender(request.getParameter("gender"));
+
+			try {
+				java.util.Date dob = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birth_date"));
+				employee.setBirthDate(new java.sql.Date(dob.getTime()));
+				java.util.Date hd = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("hire_date"));
+				employee.setHireDate(new java.sql.Date(hd.getTime()));
+			} catch (Exception ignored){}
+
+			// Create
+			eService.addEmployee(employee); // Add employee
 			deService.addDepartmentEmployee(employee, department); // Add department employee
 
 			// Set successful message

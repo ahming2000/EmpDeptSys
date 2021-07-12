@@ -100,22 +100,8 @@ public class EmployeeService {
         }
     }
 
-    public Employee addEmployee(String firstName, String lastName, String gender, String birthDate, String hireDate){
-        Employee employee = new Employee();
-
-        employee.setFirstName(firstName);
-        employee.setLastName(lastName);
-        employee.setGender(gender);
-
-        try {
-            java.util.Date dob = new SimpleDateFormat("yyyy-MM-dd").parse(birthDate);
-            employee.setBirthDate(new java.sql.Date(dob.getTime()));
-            java.util.Date hd = new SimpleDateFormat("yyyy-MM-dd").parse(hireDate);
-            employee.setHireDate(new java.sql.Date(hd.getTime()));
-        } catch (Exception ignored){}
-
+    public void addEmployee(Employee employee){
         em.persist(employee);
-        return employee;
     }
 
     public void updateEmployee(String id, String firstName, String lastName, String gender, String birthDate){

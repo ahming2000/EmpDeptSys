@@ -110,7 +110,7 @@ public class DepartmentEmployeeService {
             de.setFromDate(new java.sql.Date(date.getTime()));
 
             Calendar calender = Calendar.getInstance();
-            calender.set(8099, Calendar.JANUARY, 1); // 9999 - 1900 = 8099
+            calender.set(9999, Calendar.JANUARY, 1);
             de.setToDate(new java.sql.Date(calender.getTime().getTime()));
         } catch (Exception ignored){}
         de.setId(dePK);
