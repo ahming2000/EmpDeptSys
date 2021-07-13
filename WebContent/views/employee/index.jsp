@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <form action="<%= app.url("/employee") %>" method="get">
+    <form action="<%= app.url("/employee") %>" method="get" id="filterForm">
         <div class="row mb-3">
             <div class="col-12 col-md-4">
                 <select name="paginate" id="paginateSelect" class="form-select w-100">
@@ -292,5 +292,13 @@
 
         $('#toDeleteId').val(id);
         $('#toDeleteName').html(name);
+    });
+
+    $('#departmentSelect').on('change', function () {
+        $('#filterForm').submit();
+    });
+
+    $('#paginateSelect').on('change', function () {
+        $('#filterForm').submit();
     });
 </script>
