@@ -61,11 +61,23 @@ public class App {
         return Objects.requireNonNullElseGet(oldInputs, HashMap::new);
     }
 
-    public void setOld(String attribute, String input){
+    /**
+     * Set old input value with label/name.
+     *
+     * @param attribute Old input label/name.
+     * @param input     Old input value.
+     */
+    public void setOld(String attribute, String input) {
         oldInputs.put(attribute, input);
         request.getSession().setAttribute("old", oldInputs);
     }
 
+    /**
+     * Get old input value.
+     *
+     * @param attribute Old input label/name.
+     * @return Old input value.
+     */
     public String getOld(String attribute) {
         return oldInputs.get(attribute) == null ? "" : oldInputs.get(attribute);
     }
