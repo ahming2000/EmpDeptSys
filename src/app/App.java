@@ -10,16 +10,13 @@ import java.util.Objects;
 @SuppressWarnings("unchecked")
 public class App {
 
-    private final HttpServletRequest request;
-    private final HttpServletResponse response;
+    public final HttpServletRequest request;
+    public final HttpServletResponse response;
 
     // Variable Manager
     private final HashMap<String, Object> variables;
     private final HashMap<String, String> errors;
     private final HashMap<String, Object> sessions;
-
-    // Plugin
-    private final Validator validator;
 
     /**
      * Application class for a webpage.
@@ -32,16 +29,6 @@ public class App {
         variables = new HashMap<>();
         errors = initError();
         sessions = initSession();
-
-        // Plugin
-        validator = new Validator(this, request, response);
-    }
-
-    /**
-     * Get validator function class
-     */
-    public Validator validator() {
-        return validator;
     }
 
 

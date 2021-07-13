@@ -1,6 +1,8 @@
 package controllers.employee;
 
 import app.App;
+import app.validator.Max;
+import app.validator.Required;
 import models.Department;
 import models.Employee;
 import services.DepartmentEmployeeService;
@@ -43,9 +45,9 @@ public class CreateController extends HttpServlet {
 		App app = new App(request, response);
 
 		// Server side validation
-		if (!app.hasError()) app.validator().required(new String[]{"first_name", "last_name", "gender", "birth_date", "hire_date", "dept_id"});
-		if (!app.hasError()) app.validator().maxCharacter(new String[]{"first_name"}, 14);
-		if (!app.hasError()) app.validator().maxCharacter(new String[]{"last_name"}, 16);
+		if (!app.hasError()) new Required(app).validate(new String[]{"first_name", "last_name", "gender", "birth_date", "hire_date", "dept_id"});
+		if (!app.hasError()) new Max(app).validate(new String[]{"first_name"}, 14);
+		if (!app.hasError()) new Max(app).validate(new String[]{"last_name"}, 16);
 
 		// Perform create
 		if (!app.hasError()){

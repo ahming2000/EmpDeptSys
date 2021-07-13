@@ -1,6 +1,9 @@
 package controllers.employee;
 
 import app.App;
+import app.validator.Max;
+import app.validator.Required;
+import app.validator.UniqueDeptEmpId;
 import models.Department;
 import models.Employee;
 import services.DepartmentEmployeeService;
@@ -62,15 +65,15 @@ public class UpdateController extends HttpServlet {
 
         String empId = request.getParameter("id");
         String action = request.getParameter("action");
-        app.validator().setFailLink(app.url("/employee/edit?id=" + empId));
+        String failLink = app.url("/employee/edit?id=" + empId);
 
         // Perform update
         switch (action) {
             case "profile":
                 // Server side validation
-                if (!app.hasError()) app.validator().required(new String[]{"first_name", "last_name", "gender", "birth_date"});
-                if (!app.hasError()) app.validator().maxCharacter(new String[]{"first_name"}, 14);
-                if (!app.hasError()) app.validator().maxCharacter(new String[]{"last_name"}, 16);
+                if (!app.hasError()) new Required(app, failLink).validate(new String[]{"first_name", "last_name", "gender", "birth_date"});
+                if (!app.hasError()) new Max(app, failLink).validate(new String[]{"first_name"}, 14);
+                if (!app.hasError()) new Max(app, failLink).validate(new String[]{"last_name"}, 16);
 
                 if(!app.hasError()){
                     Employee employee = eService.getEmployee(empId);
@@ -100,7 +103,7 @@ public class UpdateController extends HttpServlet {
                 String retiredResigned = request.getParameter("retiredResigned");
 
                 // Server side validation
-				if (!app.hasError()) app.validator().uniqueDeptEmpId(deService, empId, deptId);
+				if (!app.hasError()) new UniqueDeptEmpId(app, failLink).validate(deService, empId, deptId);
 
                 if(!app.hasError()){
                     // Get required value and entity
