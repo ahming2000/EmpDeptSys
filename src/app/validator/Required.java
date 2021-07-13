@@ -26,7 +26,7 @@ public class Required extends Validator{
                 }
             }
         }
-        end();
+        end(attributes);
     }
 
 }

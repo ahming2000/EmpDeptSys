@@ -15,6 +15,7 @@ public class App {
 
     // Variable Manager
     private final HashMap<String, Object> variables;
+    private final HashMap<String, String> oldInputs;
     private final HashMap<String, String> errors;
     private final HashMap<String, Object> sessions;
 
@@ -27,6 +28,7 @@ public class App {
 
         // Variable Manager
         variables = new HashMap<>();
+        oldInputs = initOldInput();
         errors = initError();
         sessions = initSession();
     }
@@ -52,6 +54,20 @@ public class App {
      */
     public Object get(String name) {
         return variables.get(name);
+    }
+
+    private HashMap<String, String> initOldInput() {
+        HashMap<String, String> oldInputs = (HashMap<String, String>) request.getSession().getAttribute("old");
+        return Objects.requireNonNullElseGet(oldInputs, HashMap::new);
+    }
+
+    public void setOld(String attribute, String input){
+        oldInputs.put(attribute, input);
+        request.getSession().setAttribute("old", oldInputs);
+    }
+
+    public String getOld(String attribute) {
+        return oldInputs.get(attribute) == null ? "" : oldInputs.get(attribute);
     }
 
     private HashMap<String, String> initError() {

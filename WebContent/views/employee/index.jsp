@@ -144,7 +144,7 @@
                                 </td>
                                 <td>
                                     <input type="text" class="form-control <%= app.hasError("first_name") ? "is-invalid" : "" %>"
-                                           name="first_name" id="input_firstName">
+                                           name="first_name" id="input_firstName" value="<%= app.getOld("first_name") %>">
                                     <span class="invalid-feedback">
                                         <%= app.hasError("first_name") ? app.getError("first_name") : "" %>
                                     </span>
@@ -156,7 +156,7 @@
                                 </td>
                                 <td>
                                     <input type="text" class="form-control <%= app.hasError("last_name") ? "is-invalid" : "" %>"
-                                           name="last_name" id="input_lastName">
+                                           name="last_name" id="input_lastName" value="<%= app.getOld("last_name") %>">
                                     <span class="invalid-feedback">
                                         <%= app.hasError("last_name") ? app.getError("last_name") : "" %>
                                     </span>
@@ -169,9 +169,9 @@
                                 <td>
                                     <select name="gender" id="input_gender"
                                             class="form-select <%= app.hasError("gender") ? "is-invalid" : "" %>">
-                                        <option value="M">Male</option>
-                                        <option value="F">Female</option>
-                                        <option value="O">Other</option>
+                                        <option value="M" <%= app.getOld("gender").equals("M") ? "selected" : "" %>>Male</option>
+                                        <option value="F" <%= app.getOld("gender").equals("F") ? "selected" : "" %>>Female</option>
+                                        <option value="O" <%= app.getOld("gender").equals("O") ? "selected" : "" %>>Other</option>
                                     </select>
                                     <span class="invalid-feedback">
                                         <%= app.hasError("gender") ? app.getError("gender") : "" %>
@@ -184,7 +184,7 @@
                                 </td>
                                 <td>
                                     <input type="date" class="form-control <%= app.hasError("birth_date") ? "is-invalid" : "" %>"
-                                           name="birth_date" id="input_birthDate">
+                                           name="birth_date" id="input_birthDate" value="<%= app.getOld("birth_date") %>">
                                     <span class="invalid-feedback">
                                         <%= app.hasError("birth_date") ? app.getError("birth_date") : "" %>
                                     </span>
@@ -196,7 +196,7 @@
                                 </td>
                                 <td>
                                     <input type="date" class="form-control <%= app.hasError("hire_date") ? "is-invalid" : "" %>"
-                                           name="hire_date" id="input_hireDate">
+                                           name="hire_date" id="input_hireDate" value="<%= app.getOld("hire_date") %>">
                                     <span class="invalid-feedback">
                                         <%= app.hasError("hire_date") ? app.getError("hire_date") : "" %>
                                     </span>
@@ -210,7 +210,7 @@
                                     <select name="dept_id" id="input_department"
                                             class="form-select <%= app.hasError("dept_id") ? "is-invalid" : "" %>">
                                         <% for (Department department : departments) { %>
-                                        <option value="<%= department.getId() %>">
+                                        <option value="<%= department.getId() %>" <%= app.getOld("dept_id").equals(department.getId()) ? "selected" : "" %>>
                                             <%= department.getDeptName() %>
                                         </option>
                                         <% } %>

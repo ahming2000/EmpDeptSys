@@ -39,7 +39,7 @@
                             </td>
                             <td>
                                 <input type="text" class="form-control <%= app.hasError("first_name") ? "is-invalid" : "" %>" name="first_name"
-                                       id="input_firstName" value="<%= employee.getFirstName() %>">
+                                       id="input_firstName" value="<%= app.hasError() ? app.getOld("first_name") : employee.getFirstName() %>">
                                 <span class="invalid-feedback">
                                     <%= app.hasError("first_name") ? app.getError("first_name") : "" %>
                                 </span>
@@ -53,27 +53,27 @@
                             </td>
                             <td>
                                 <input type="text" class="form-control <%= app.hasError("last_name") ? "is-invalid" : "" %>" name="last_name"
-                                       id="input_lastName" value="<%= employee.getLastName() %>">
+                                       id="input_lastName" value="<%= app.hasError() ? app.getOld("last_name") : employee.getLastName() %>">
                                 <span class="invalid-feedback">
                                     <%= app.hasError("last_name") ? app.getError("last_name") : "" %>
                                 </span>
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-end">
+                            <td class="text-end">z 
                                 <label for="input_gender">
                                     Gender:
                                 </label>
                             </td>
                             <td>
                                 <select class="form-select <%= app.hasError("gender") ? "is-invalid" : "" %>" name="gender" id="input_gender">
-                                    <option value="M" <%= employee.getGender().equals("M") ? "selected" : "" %>>
+                                    <option value="M" <%= app.hasError() ? (app.getOld("gender").equals("M") ? "selected" : "") : (employee.getGender().equals("M") ? "selected" : "") %>>
                                         Male
                                     </option>
-                                    <option value="F" <%= employee.getGender().equals("F") ? "selected" : "" %>>
+                                    <option value="F" <%= app.hasError() ? (app.getOld("gender").equals("F") ? "selected" : "") : (employee.getGender().equals("F") ? "selected" : "") %>>
                                         Female
                                     </option>
-                                    <option value="O" <%= employee.getGender().equals("O") ? "selected" : "" %>>
+                                    <option value="O" <%= app.hasError() ? (app.getOld("gender").equals("O") ? "selected" : "") : (employee.getGender().equals("O") ? "selected" : "") %>>
                                         Other
                                     </option>
                                 </select>
@@ -90,7 +90,7 @@
                             </td>
                             <td>
                                 <input type="date" class="form-control <%= app.hasError("birth_date") ? "is-invalid" : "" %>"
-                                       name="birth_date" id="input_birthDate" value="<%= employee.getBirthDate() %>">
+                                       name="birth_date" id="input_birthDate" value="<%= app.hasError() ? app.getOld("birth_date") : employee.getBirthDate() %>">
                                 <span class="invalid-feedback">
                                     <%= app.hasError("birth_date") ? app.getError("birth_date") : "" %>
                                 </span>

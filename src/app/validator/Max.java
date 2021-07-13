@@ -24,7 +24,7 @@ public class Max extends Validator{
                 app.setError(attribute, "The " + attribute.replace('_', ' ') + " field must not exceed " + max + " character(s)!");
             }
         }
-        end();
+        end(attributes);
     }
 
 }
