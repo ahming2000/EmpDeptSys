@@ -1,5 +1,7 @@
 package app;
 
+import app.auth.Auth;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +21,9 @@ public class App {
     private final HashMap<String, String> errors;
     private final HashMap<String, Object> sessions;
 
+    // Plugin
+    private final Auth auth;
+
     /**
      * Application class for a webpage.
      */
@@ -31,8 +36,15 @@ public class App {
         oldInputs = initOldInput();
         errors = initError();
         sessions = initSession();
+
+        // Plugin
+        auth = new Auth(this);
     }
 
+    /* Plugin */
+    public Auth auth(){
+        return auth;
+    }
 
     /* Variable Manager */
 
