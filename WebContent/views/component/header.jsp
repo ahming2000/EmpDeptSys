@@ -13,11 +13,45 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
                 <ul class="navbar-nav ms-auto">
+                    <% if (app.auth().guest()) { %>
+
                     <li class="nav-item">
-                        <a class="nav-link" href="<%= app.url("/employee") %>">
-                            Employee Home
+                        <a href="<%= app.url("/login") %>" class="nav-link">
+                            Login
                         </a>
                     </li>
+
+                    <% } else { %>
+
+                    <% if (app.auth().user().isManager()) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<%= app.url("/employee") %>">
+                            Employee Manage
+                        </a>
+                    </li>
+                    <% } %>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <%= app.auth().user().getFullName() %>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                <a href="<%= app.url("/profile") %>" class="dropdown-item">
+                                    My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="" onclick="event.preventDefault();document.getElementById('logoutForm').submit();">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <form action="<%= app.url("/logout") %>" method="post" id="logoutForm"></form>
+
+                    <% } %>
                 </ul>
 
             </div>
