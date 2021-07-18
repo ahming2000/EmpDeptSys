@@ -28,4 +28,27 @@
     <filter-name>AvoidJspDirectAccess</filter-name>
     <url-pattern>/views/*</url-pattern>
   </filter-mapping>
+
+  <filter>
+    <filter-name>Authentication</filter-name>
+    <filter-class>filters.Authentication</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>Authentication</filter-name>
+    <url-pattern>/employee</url-pattern>
+    <url-pattern>/profile</url-pattern>
+    <url-pattern>/employee/view</url-pattern>
+    <url-pattern>/employee/edit</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>AccessControl</filter-name>
+    <filter-class>filters.AccessControl</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AccessControl</filter-name>
+    <url-pattern>/employee</url-pattern>
+    <url-pattern>/employee/view</url-pattern>
+    <url-pattern>/employee/edit</url-pattern>
+  </filter-mapping>
 </web-app>
