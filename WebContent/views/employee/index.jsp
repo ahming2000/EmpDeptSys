@@ -11,7 +11,7 @@
     <div class="row mb-2">
         <div class="col-12 d-flex justify-content-between">
             <div class="h1">
-                Employee Home
+                Employee Manage
             </div>
 
             <div class="mt-auto">
@@ -24,7 +24,7 @@
 
     <form action="<%= app.url("/employee") %>" method="get" id="filterForm">
         <div class="row mb-3">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-4 mb-1">
                 <select name="paginate" id="paginateSelect" class="form-select w-100">
                     <option value="100" <%= app.paramSelected("paginate", "100") %>>
                         100 records per page
@@ -44,7 +44,7 @@
                 </select>
             </div>
 
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-4 mb-1">
                 <select name="department" id="departmentSelect" class="form-select w-100">
                     <option value="">
                         All (<%= app.get("totalEmpCount") %>)
@@ -58,15 +58,17 @@
                 </select>
             </div>
 
-            <div class="col-12 col-md-4 d-flex justify-content-between">
+            <div class="col-12 col-md-4 mb-1 d-flex justify-content-between">
                 <div class="flex-grow-1 me-2">
                     <input type="text" class="form-control" name="search" placeholder="Search"
                            value="<%= app.param("search", "") %>">
                 </div>
 
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-search"></i> Search
-                </button>
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
             </div>
         </div>
     </form>
@@ -77,29 +79,16 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mb-3">
         <div class="col-12">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Department</th>
-                    <th scope="col">Action</th>
-                </tr>
-                </thead>
-                <tbody>
+            <ul class="list-group">
                 <% for (Employee employee : employees) { %>
-                <tr>
-                    <td>
+                <li class="list-group-item d-flex justify-content-between">
+                    <div>
                         <input type="hidden" class="employeeId" value="<%= employee.getId() %>">
                         <span class="employeeName"><%= employee.getFullName() %></span>
-                    </td>
-
-                    <td>
-                        <%= app.get("empCurrentDeptName_" + employee.getId()) %>
-                    </td>
-
-                    <td>
+                    </div>
+                    <div>
                         <button type="button" class="btn btn-primary btn-sm me-1"
                                 onclick="window.location.href = '<%= app.url("/employee/view?id=" + employee.getId()) %>'">
                             <i class="fas fa-list"></i>
@@ -111,11 +100,10 @@
                         <button type="button" class="btn btn-danger btn-sm deleteEmployeeButton me-1" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">
                             <i class="fas fa-trash"></i>
                         </button>
-                    </td>
-                </tr>
+                    </div>
+                </li>
                 <% } %>
-                </tbody>
-            </table>
+            </ul>
         </div>
     </div>
 
@@ -268,7 +256,7 @@
     <% } %>
 
     $('.deleteEmployeeButton').on("click", function(){
-        let currentRow = $(this).closest('tr');
+        let currentRow = $(this).closest('li');
         let id = currentRow.find('.employeeId').val();
         let name = currentRow.find('.employeeName').html();
 

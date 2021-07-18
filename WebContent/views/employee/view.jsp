@@ -26,7 +26,7 @@
                 <tbody>
                 <tr>
                     <td style="width: 175px">Name: </td>
-                    <td><%= employee.getFullName() %></td>
+                    <td><%= employee.getFullName() %><%= (boolean) app.get("isManager") ? " (Manager)" : "" %></td>
                 </tr>
                 <tr>
                     <td>Gender: </td>
