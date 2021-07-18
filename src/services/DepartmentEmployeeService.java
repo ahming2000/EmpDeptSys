@@ -32,11 +32,28 @@ public class DepartmentEmployeeService {
     }
 
     public ArrayList<DepartmentEmployee> getDepartmentsInvolved(String employee_id) {
+        long employee_id_long;
+        try {
+            employee_id_long = Long.parseLong(employee_id);
+        } catch (NumberFormatException exception){
+            return new ArrayList<>();
+        }
+
         try {
             Query q = em.createNamedQuery("DepartmentEmployee.find.empId");
-            q.setParameter("employee_id", Long.parseLong(employee_id));
+            q.setParameter("employee_id", employee_id_long);
             return (ArrayList<DepartmentEmployee>) q.getResultList();
         } catch (NoResultException exception) {
+            return new ArrayList<>();
+        }
+    }
+
+    public ArrayList<DepartmentEmployee> getEmployeesInvolved(String department_id){
+        try {
+            Query q = em.createNamedQuery("DepartmentEmployee.find.deptId");
+            q.setParameter("department_id", department_id);
+            return (ArrayList<DepartmentEmployee>) q.getResultList();
+        } catch (NoResultException exception){
             return new ArrayList<>();
         }
     }
@@ -69,6 +86,8 @@ public class DepartmentEmployeeService {
             return 0;
         }
     }
+
+
 
     public String getCurrentDepartmentName(String employee_id){
         for(DepartmentEmployee de: getDepartmentsInvolved(employee_id)){
