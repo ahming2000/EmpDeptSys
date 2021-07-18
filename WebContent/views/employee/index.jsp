@@ -47,12 +47,12 @@
             <div class="col-12 col-md-4 mb-1">
                 <select name="department" id="departmentSelect" class="form-select w-100">
                     <option value="">
-                        All (<%= app.get("totalEmpCount") %>)
+                        All (<%= app.get("empCount_all") %>)
                     </option>
 
                     <% for (Department department : departments) { %>
                     <option value="<%= department.getId() %>" <%= app.paramSelected("department", department.getId()) %>>
-                        <%= department.getDeptName() %> (<%= app.get("empCount_" + department.getDeptName()) %>)
+                        <%= department.getDeptName() %> (<%= app.get("empCount_" + department.getId()) %>)
                     </option>
                     <% } %>
                 </select>
@@ -60,8 +60,8 @@
 
             <div class="col-12 col-md-4 mb-1 d-flex justify-content-between">
                 <div class="flex-grow-1 me-2">
-                    <input type="text" class="form-control" name="search" placeholder="Search"
-                           value="<%= app.param("search", "") %>">
+                    <input type="text" class="form-control" name="search"
+                           placeholder="Search" value="<%= app.param("search", "") %>">
                 </div>
 
                 <div>
@@ -82,27 +82,35 @@
     <div class="row mb-3">
         <div class="col-12">
             <ul class="list-group">
+
                 <% for (Employee employee : employees) { %>
                 <li class="list-group-item d-flex justify-content-between">
+
                     <div>
                         <input type="hidden" class="employeeId" value="<%= employee.getId() %>">
                         <span class="employeeName"><%= employee.getFullName() %></span>
                     </div>
+
                     <div>
                         <button type="button" class="btn btn-primary btn-sm me-1"
                                 onclick="window.location.href = '<%= app.url("/employee/view?id=" + employee.getId()) %>'">
                             <i class="fas fa-list"></i>
                         </button>
+
                         <button type="button" class="btn btn-outline-primary btn-sm me-1"
                                 onclick="window.location.href = '<%= app.url("/employee/edit?id=" + employee.getId()) %>'">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button type="button" class="btn btn-danger btn-sm deleteEmployeeButton me-1" data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">
+
+                        <button type="button" class="btn btn-danger btn-sm deleteEmployeeButton me-1"
+                                data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
+
                 </li>
                 <% } %>
+
             </ul>
         </div>
     </div>
@@ -187,24 +195,6 @@
                                            name="hire_date" id="input_hireDate" value="<%= app.getOld("hire_date") %>">
                                     <span class="invalid-feedback">
                                         <%= app.hasError("hire_date") ? app.getError("hire_date") : "" %>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-end">
-                                    <label for="input_department">Department: </label>
-                                </td>
-                                <td>
-                                    <select name="dept_id" id="input_department"
-                                            class="form-select <%= app.hasError("dept_id") ? "is-invalid" : "" %>">
-                                        <% for (Department department : departments) { %>
-                                        <option value="<%= department.getId() %>" <%= app.getOld("dept_id").equals(department.getId()) ? "selected" : "" %>>
-                                            <%= department.getDeptName() %>
-                                        </option>
-                                        <% } %>
-                                    </select>
-                                    <span class="invalid-feedback">
-                                        <%= app.hasError("dept_id") ? app.getError("dept_id") : "" %>
                                     </span>
                                 </td>
                             </tr>

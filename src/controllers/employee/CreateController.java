@@ -52,7 +52,7 @@ public class CreateController extends HttpServlet {
 		// Perform create
 		if (!app.hasError()){
 			Employee employee = new Employee();
-			Department department = dService.getDepartment(request.getParameter("dept_id")); // Fetch department class
+			Department department = dService.getDepartment(app.auth().user().getDeptId()); // Fetch department class
 
 			employee.setFirstName(request.getParameter("first_name"));
 			employee.setLastName(request.getParameter("last_name"));

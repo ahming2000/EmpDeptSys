@@ -3,7 +3,6 @@ package controllers.employee;
 import app.App;
 import app.validator.Max;
 import app.validator.Required;
-import app.validator.UniqueDeptEmpId;
 import models.Department;
 import models.Employee;
 import services.DepartmentEmployeeService;

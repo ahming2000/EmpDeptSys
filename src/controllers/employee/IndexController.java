@@ -39,7 +39,7 @@ public class IndexController extends HttpServlet {
         String department = app.param("department", "");
 
         // Get total employee count
-        app.set("totalEmpCount", eService.getEmployeeCount());
+        app.set("empCount_all", eService.getEmployeeCount());
 
         // Get all departments
         ArrayList<Department> departments = dService.getAllDepartments();
@@ -47,7 +47,7 @@ public class IndexController extends HttpServlet {
 
         // Get all departments' employee count
         for (Department dept : departments) {
-            app.set("empCount_" + dept.getDeptName(), deService.getEmployeeCount(dept.getId()));
+            app.set("empCount_" + dept.getId(), deService.getEmployeeCount(dept.getId()));
         }
 
         // Setup pagination
