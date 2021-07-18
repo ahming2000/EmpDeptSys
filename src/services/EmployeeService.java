@@ -113,4 +113,24 @@ public class EmployeeService {
         em.remove(employee);
     }
 
+    public boolean isEmployee(String id, String first_name, String last_name){
+        long id_long;
+        try{
+            id_long = Long.parseLong(id);
+        } catch (NumberFormatException exception){
+            return false;
+        }
+
+        try {
+            Query q = em.createNamedQuery("Employee.verify");
+            q.setParameter("id", id_long);
+            q.setParameter("first_name", first_name);
+            q.setParameter("last_name", last_name);
+            q.getSingleResult();
+            return true;
+        } catch(NoResultException exception) {
+            return false;
+        }
+    }
+
 }
