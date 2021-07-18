@@ -15,6 +15,9 @@ public class VerifyEmployee extends Validator{
         super(app, failLink);
     }
 
+    /**
+     * Validate user which id, first name, last name need to match database employee table's row
+     */
     public void validate(EmployeeService eService, AuthUser user) throws IOException {
         if(!eService.isEmployee(user.getId(), user.getFirstName(), user.getLastName())){
             app.setError("id", "The information given doesn't match our records! ");
