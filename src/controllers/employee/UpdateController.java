@@ -7,6 +7,7 @@ import app.validator.UniqueDeptEmpId;
 import models.Department;
 import models.Employee;
 import services.DepartmentEmployeeService;
+import services.DepartmentManagerService;
 import services.DepartmentService;
 import services.EmployeeService;
 
@@ -33,6 +34,9 @@ public class UpdateController extends HttpServlet {
     @Inject
     private DepartmentEmployeeService deService;
 
+    @Inject
+    private DepartmentManagerService dmService;
+
     public UpdateController() {
         super();
     }
@@ -50,6 +54,24 @@ public class UpdateController extends HttpServlet {
 
             // Get employee's current department
             app.set("currentDeptId", deService.getCurrentDepartmentId(id));
+            app.set("currentDeptName", deService.getCurrentDepartmentName(id));
+
+            // Check if the auth user is department's manager or not
+            app.set("authUserDeptName", dService.getDepartment(app.auth().user().getDeptId()).getDeptName());
+            app.set("isManagerForCurrentDept", dmService.isManager(app.auth().user().getId(), deService.getCurrentDepartmentId(id)));
+
+            // Button flag
+            if (app.auth().user().getDeptId().equals(deService.getCurrentDepartmentId(id))) {
+                app.set("canChangeDept", false);
+                app.set("canMarkAsResignRetired", true);
+            } else {
+                if (deService.isDuplicated(id, app.auth().user().getDeptId())) {
+                    app.set("canChangeDept", false);
+                } else {
+                    app.set("canChangeDept", true);
+                }
+                app.set("canMarkAsResignRetired", false);
+            }
 
             // Get all departments
             ArrayList<Department> departments = dService.getAllDepartments();
@@ -71,11 +93,12 @@ public class UpdateController extends HttpServlet {
         switch (action) {
             case "profile":
                 // Server side validation
-                if (!app.hasError()) new Required(app, failLink).validate(new String[]{"first_name", "last_name", "gender", "birth_date"});
+                if (!app.hasError())
+                    new Required(app, failLink).validate(new String[]{"first_name", "last_name", "gender", "birth_date"});
                 if (!app.hasError()) new Max(app, failLink).validate(new String[]{"first_name"}, 14);
                 if (!app.hasError()) new Max(app, failLink).validate(new String[]{"last_name"}, 16);
 
-                if(!app.hasError()){
+                if (!app.hasError()) {
                     Employee employee = eService.getEmployee(empId);
 
                     employee.setFirstName(request.getParameter("first_name"));
@@ -85,7 +108,8 @@ public class UpdateController extends HttpServlet {
                     try {
                         java.util.Date dob = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birth_date"));
                         employee.setBirthDate(new java.sql.Date(dob.getTime()));
-                    } catch (Exception ignored){}
+                    } catch (Exception ignored) {
+                    }
 
                     // Update employee
                     eService.updateEmployee(employee);
@@ -98,42 +122,44 @@ public class UpdateController extends HttpServlet {
                 break;
 
             case "department":
-                // Get parameters
-                String deptId = request.getParameter("dept_id");
-                String retiredResigned = request.getParameter("retiredResigned");
+                String subAction = request.getParameter("subAction");
 
-                // Server side validation
-				if (!app.hasError()) new UniqueDeptEmpId(app, failLink).validate(deService, empId, deptId);
+                switch (subAction) {
+                    case "changeToAuthUserDept":
 
-                if(!app.hasError()){
-                    // Get required value and entity
-                    String currentDeptId = deService.getCurrentDepartmentId(empId);
-                    Employee employee = eService.getEmployee(empId);
-                    Department department = dService.getDepartment(deptId);
+                        if (!app.auth().user().getDeptId().equals("Resigned/Retired")) {
+                            Department currentAuthUserDept = dService.getDepartment(app.auth().user().getDeptId());
 
-                    if (retiredResigned == null) {
-                        // If this employee previously is resigned/retired
-                        if (currentDeptId.equals("Resigned/Retired")) {
-                            deService.addDepartmentEmployee(employee, department); // Add selected department as new department for this employee
+                            String currentDeptId = deService.getCurrentDepartmentId(empId);
+                            Employee employee = eService.getEmployee(empId);
+                            Department department = dService.getDepartment(currentAuthUserDept.getId());
+
+                            // If this employee previously is resigned/retired
+                            if (currentDeptId.equals("Resigned/Retired")) {
+                                deService.addDepartmentEmployee(employee, department); // Add selected department as new department for this employee
+                            }
+
+                            // Else, when department selected is different from current department
+                            else if (!currentDeptId.equals(currentAuthUserDept.getId())) {
+                                deService.updateDepartmentEmployee(empId, new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())); // Set date now to current department toDate
+                                deService.addDepartmentEmployee(employee, department); // Add selected department as new department for this employee
+                            }
                         }
+                        break;
 
-                        // Else, when department selected is different from current department
-                        else if (!currentDeptId.equals(deptId)) {
+                    case "markAsResignRetired":
+                        if (!app.auth().user().getDeptId().equals("Resigned/Retired")) {
                             deService.updateDepartmentEmployee(empId, new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())); // Set date now to current department toDate
-                            deService.addDepartmentEmployee(employee, department); // Add selected department as new department for this employee
                         }
-                    } else {
-                        // If this employee choose to resign/retire and previously not resigned/retired (prevent bug)
-                        if (!currentDeptId.equals("Resigned/Retired")) {
-                            deService.updateDepartmentEmployee(empId, new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())); // Set date now to current department toDate
-                        }
-                    }
+                        break;
 
-                    // Set successful message
-                    app.setSession("message", "Update department successfully!");
-
-                    app.redirect("/employee/edit?id=" + empId);
+                    default:
                 }
+
+                // Set successful message
+                app.setSession("message", "Update department successfully!");
+
+                app.redirect("/employee/edit?id=" + empId);
                 break;
 
             default:

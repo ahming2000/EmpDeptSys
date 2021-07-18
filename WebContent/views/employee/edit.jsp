@@ -11,7 +11,6 @@
         <div class="col-12 col-sm-10 col-lg-8 col-xl-6 offset-sm-1 offset-lg-2 offset-xl-3">
 
             <form action="<%= app.url("/employee/update") %>" method="post">
-                <input type="hidden" name="action" value="profile">
                 <input type="hidden" name="id" value="<%= employee.getId() %>">
 
                 <div class="mb-2">
@@ -60,7 +59,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-end">z 
+                            <td class="text-end">
                                 <label for="input_gender">
                                     Gender:
                                 </label>
@@ -101,46 +100,52 @@
                 </div>
             </form>
 
-            <form action="<%= app.url("/employee/update") %>" method="post">
-                <input type="hidden" name="action" value="department">
-                <input type="hidden" name="id" value="<%= employee.getId() %>">
+            <div>
+                <div class="h1 mb-3">Department</div>
 
-                <div class="mb-2">
-                    <div class="d-flex justify-content-between">
-                        <div class="h1">
-                            Change Department
+                <div class="text-center">
+                    <div class="row">
+                        <div class="col-12">
+                            <span>Current Department Status:</span>
                         </div>
 
-                        <div class="mt-auto">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-save"></i> Save
-                            </button>
+                        <div class="col-12 mb-3">
+                            <span><%= app.get("currentDeptName") %></span>
                         </div>
-                    </div>
-                </div>
 
-                <div class="mb-1">
-                    <select class="form-select <%= app.hasError("dept_id") ? "is-invalid" : "" %>" name="dept_id"
-                            id="input_deptName" <%= app.get("currentDeptId").equals("Resigned/Retired") ? "disabled" : "" %>>
-                        <% for (Department department : departments) { %>
-                        <option value="<%= department.getId() %>" <%= app.get("currentDeptId").equals(department.getId()) ? "selected" : "" %>>
-                            <%= department.getDeptName() %>
-                        </option>
+                        <% if ((boolean) app.get("canChangeDept")) { %>
+                        <form action="<%= app.url("/employee/update") %>" method="post">
+                            <input type="hidden" name="id" value="<%= employee.getId() %>">
+                            <input type="hidden" value="department" name="action">
+                            <input type="hidden" value="changeToAuthUserDept" name="subAction">
+
+                            <div class="col-12 mb-1">
+                                <button type="submit" class="btn btn-primary">
+                                    Change to <%= app.get("authUserDeptName") %> Department
+                                </button>
+                            </div>
+                        </form>
                         <% } %>
-                    </select>
-                    <span class="invalid-feedback">
-                        <%= app.hasError("dept_id") ? app.getError("dept_id") : "" %>
-                    </span>
+
+                        <% if ((boolean) app.get("canMarkAsResignRetired")) { %>
+                        <form action="<%= app.url("/employee/update") %>" method="post">
+                            <input type="hidden" name="id" value="<%= employee.getId() %>">
+                            <input type="hidden" value="department" name="action">
+                            <input type="hidden" value="markAsResignRetired" name="subAction">
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    Mark as Resign/Retired
+                                </button>
+                            </div>
+                        </form>
+                        <% } %>
+
+                    </div>
+
                 </div>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="retiredResigned" id="hasResignedRetiredCheckBox"
-                        <%= app.get("currentDeptId").equals("Resigned/Retired") ? "checked" : "" %>>
-                    <label class="form-check-label" for="hasResignedRetiredCheckBox">
-                        Resigned/Retired
-                    </label>
-                </div>
-            </form>
+            </div>
 
         </div>
     </div>
