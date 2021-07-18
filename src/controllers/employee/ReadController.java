@@ -3,6 +3,7 @@ package controllers.employee;
 import app.App;
 import models.Employee;
 import services.DepartmentEmployeeService;
+import services.DepartmentManagerService;
 import services.DepartmentService;
 import services.EmployeeService;
 
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/employee/view")
+@WebServlet(urlPatterns = {"/employee/view", "/profile"})
 public class ReadController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -27,6 +28,9 @@ public class ReadController extends HttpServlet {
     @Inject
     private DepartmentEmployeeService deService;
 
+    @Inject
+    private DepartmentManagerService dmService;
+
     public ReadController() {
         super();
     }
@@ -34,7 +38,8 @@ public class ReadController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App app = new App(request, response);
 
-        String id = request.getParameter("id");
+        String defaultId = app.auth().user().getId() == null ? "" : app.auth().user().getId();
+        String id = app.param("id", app.auth().user().getId());
         Employee employee = eService.getEmployee(id);
 
         if (employee == null) { // If the employee id is not found
@@ -43,6 +48,8 @@ public class ReadController extends HttpServlet {
             // Get involved departments for employee
             employee.setDepartmentEmployees(deService.getDepartmentsInvolved(id));
             app.set("employee", employee);
+
+            app.set("isManager", dmService.isManager(id, deService.getCurrentDepartmentId(id)));
 
             // Get employee's current department
             app.set("currentDeptName", deService.getCurrentDepartmentName(id));
