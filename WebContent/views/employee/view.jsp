@@ -12,7 +12,7 @@
                     Basic Information
                 </div>
                 <div class="mt-auto">
-                    <% if ((boolean) app.get("canEdit")) { %>
+
                     <% if (app.auth().user().isManager()) { %>
                     <button class="btn btn-outline-primary"
                             onclick="window.location.href = '<%= app.url("/employee/edit?id=" + employee.getId()) %>'">
@@ -23,7 +23,6 @@
                             onclick="window.location.href = '<%= app.url("/profile/edit") %>'">
                         <i class="fas fa-edit"></i> Edit
                     </button>
-                    <% } %>
                     <% } %>
 
                     <% if ((boolean) app.get("canDelete")) { %>

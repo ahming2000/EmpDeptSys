@@ -1,6 +1,7 @@
 package controllers.employee;
 
 import app.App;
+import app.utility.DisplayControl;
 import models.Employee;
 import services.DepartmentEmployeeService;
 import services.DepartmentManagerService;
@@ -38,32 +39,26 @@ public class ReadController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App app = new App(request, response);
 
-        String id = app.param("id", app.auth().user().getId());
-        Employee employee = eService.getEmployee(id);
+        String empId = app.param("id", app.auth().user().getId());
+        Employee employee = eService.getEmployee(empId);
 
         if (employee == null) { // If the employee id is not found
             app.abort(404);
         } else {
             // Get involved departments for employee
-            employee.setDepartmentEmployees(deService.getDepartmentsInvolved(id));
+            String deptId = deService.getCurrentDepartmentId(empId);
+            boolean isManager = dmService.isManager(empId, deptId);
+
+            employee.setDepartmentEmployees(deService.getDepartmentsInvolved(empId));
             app.set("employee", employee);
 
-            app.set("isManager", dmService.isManager(id, deService.getCurrentDepartmentId(id)));
+            app.set("isManager", isManager);
 
-            if (app.auth().user().isManager() && !id.equals(app.auth().user().getId())){
-                app.set("canDelete", true);
-            } else {
-                app.set("canDelete", false);
-            }
-
-            if (app.auth().user().isManager() || id.equals(app.auth().user().getId())){
-                app.set("canEdit", true);
-            } else {
-                app.set("canEdit", false);
-            }
+            DisplayControl displayControl = new DisplayControl(app.auth().user(), empId, deptId, isManager);
+            app.set("canDelete", displayControl.canDelete());
 
             // Get employee's current department
-            app.set("currentDeptName", deService.getCurrentDepartmentName(id));
+            app.set("currentDeptName", deService.getCurrentDepartmentName(empId));
 
             app.view("employee/view", employee.getFirstName() + " " + employee.getLastName());
         }

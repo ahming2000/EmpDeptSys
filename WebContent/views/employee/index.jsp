@@ -80,7 +80,7 @@
     </div>
 
     <div class="row mb-3">
-        <div class="col-12">
+        <div class="col-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
             <ul class="list-group">
 
                 <% for (Employee employee : employees) { %>
@@ -103,7 +103,8 @@
                         </button>
 
                         <button type="button" class="btn btn-danger btn-sm deleteEmployeeButton me-1"
-                                data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal">
+                                data-bs-toggle="modal" data-bs-target="#deleteEmployeeModal"
+                                <%= app.auth().user().getDeptId().equals(app.get("deptId_" + employee.getId().toString())) ? "" : " disabled" %>>
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>

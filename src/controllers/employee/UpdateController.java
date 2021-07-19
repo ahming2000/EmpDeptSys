@@ -1,6 +1,7 @@
 package controllers.employee;
 
 import app.App;
+import app.utility.DisplayControl;
 import app.validator.Max;
 import app.validator.Required;
 import models.Department;
@@ -43,38 +44,35 @@ public class UpdateController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App app = new App(request, response);
 
-        String id = app.param("id", app.auth().user().getId());
-        Employee employee = eService.getEmployee(id);
+        String empId = app.param("id", app.auth().user().getId());
+        Employee employee = eService.getEmployee(empId);
 
         if (employee == null) {
             app.abort(404);
         } else {
+            String deptId = deService.getCurrentDepartmentId(empId);
+            boolean isManager = dmService.isManager(empId, deptId);
+            boolean empHasAuthUserDept = deService.isDuplicated(empId, app.auth().user().getDeptId());
+
             app.set("employee", employee);
 
             // Get employee's current department
-            app.set("currentDeptId", deService.getCurrentDepartmentId(id));
-            app.set("currentDeptName", deService.getCurrentDepartmentName(id));
+            app.set("currentDeptId", deService.getCurrentDepartmentId(empId));
+            app.set("currentDeptName", deService.getCurrentDepartmentName(empId));
 
             // Check if the auth user is department's manager or not
             app.set("authUserDeptName", dService.getDepartment(app.auth().user().getDeptId()).getDeptName());
-            app.set("isManagerForCurrentDept", dmService.isManager(app.auth().user().getId(), deService.getCurrentDepartmentId(id)));
-
-            // Button flag
-            if (app.auth().user().getDeptId().equals(deService.getCurrentDepartmentId(id))) {
-                app.set("canChangeDept", false);
-                app.set("canMarkAsResignRetired", true);
-            } else {
-                if (deService.isDuplicated(id, app.auth().user().getDeptId())) {
-                    app.set("canChangeDept", false);
-                } else {
-                    app.set("canChangeDept", true);
-                }
-                app.set("canMarkAsResignRetired", false);
-            }
 
             // Get all departments
             ArrayList<Department> departments = dService.getAllDepartments();
             app.set("departments", departments);
+
+            app.set("isManager", isManager);
+
+            DisplayControl displayControl = new DisplayControl(app.auth().user(), empId, deptId, isManager);
+            app.set("canEditProfile", displayControl.canEditProfile());
+            app.set("canChangeDept", displayControl.canChangeDept(empHasAuthUserDept));
+            app.set("canMarkResignedRetired", displayControl.canMarkResignedRetired());
 
             app.view("employee/edit", "Edit " + employee.getFirstName() + " " + employee.getLastName());
         }

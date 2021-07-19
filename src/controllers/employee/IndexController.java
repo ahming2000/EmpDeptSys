@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import app.App;
+import app.utility.DisplayControl;
 import models.Department;
 import models.Employee;
 import services.DepartmentEmployeeService;
@@ -58,11 +59,12 @@ public class IndexController extends HttpServlet {
         ArrayList<Employee> employees = eService.getEmployees(page, paginate, search, department);
         app.set("employees", employees);
 
-        // Get all employees' current department
         for (Employee employee : employees) {
-            String deptName = deService.getCurrentDepartmentName(employee.getId().toString());
-            app.set("empCurrentDeptName_" + employee.getId().toString(), deptName);
+            String deptId = deService.getCurrentDepartmentId(employee.getId().toString());
+            app.set("deptId_" + employee.getId().toString(), deptId);
         }
+
+
 
         app.view("employee/index", "Employee Manage");
     }
