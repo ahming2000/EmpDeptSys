@@ -13,7 +13,7 @@ import java.util.Date;
 @Table(name = "department_employee", schema = "employees")
 @NamedQueries({
 		@NamedQuery(name = "DepartmentEmployee.all", query = "SELECT de FROM DepartmentEmployee de"),
-		@NamedQuery(name = "DepartmentEmployee.find.empId", query = "SELECT de FROM DepartmentEmployee de WHERE de.id.employeeId = :employee_id"),
+		@NamedQuery(name = "DepartmentEmployee.find.empId", query = "SELECT de FROM DepartmentEmployee de WHERE de.id.employeeId = :employee_id ORDER BY de.fromDate"),
 		@NamedQuery(name = "DepartmentEmployee.find.deptId", query = "SELECT de FROM DepartmentEmployee de WHERE de.id.departmentId = :department_id"),
 		@NamedQuery(name = "DepartmentEmployee.find.empId.deptId", query = "SELECT de FROM DepartmentEmployee de WHERE de.id.employeeId = :employee_id AND de.id.departmentId = :department_id"),
 })

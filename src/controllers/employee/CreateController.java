@@ -45,14 +45,14 @@ public class CreateController extends HttpServlet {
 		App app = new App(request, response);
 
 		// Server side validation
-		if (!app.hasError()) new Required(app).validate(new String[]{"first_name", "last_name", "gender", "birth_date", "hire_date", "dept_id"});
+		if (!app.hasError()) new Required(app).validate(new String[]{"first_name", "last_name", "gender", "birth_date", "hire_date"});
 		if (!app.hasError()) new Max(app).validate(new String[]{"first_name"}, 14);
 		if (!app.hasError()) new Max(app).validate(new String[]{"last_name"}, 16);
 
 		// Perform create
 		if (!app.hasError()){
 			Employee employee = new Employee();
-			Department department = dService.getDepartment(app.auth().user().getDeptId()); // Fetch department class
+			Department department = dService.getDepartment(app.auth().user().getDeptId()); // Fetch department with auth user department
 
 			employee.setFirstName(request.getParameter("first_name"));
 			employee.setLastName(request.getParameter("last_name"));

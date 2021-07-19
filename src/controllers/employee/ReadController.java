@@ -38,7 +38,6 @@ public class ReadController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App app = new App(request, response);
 
-        String defaultId = app.auth().user().getId() == null ? "" : app.auth().user().getId();
         String id = app.param("id", app.auth().user().getId());
         Employee employee = eService.getEmployee(id);
 
@@ -50,6 +49,18 @@ public class ReadController extends HttpServlet {
             app.set("employee", employee);
 
             app.set("isManager", dmService.isManager(id, deService.getCurrentDepartmentId(id)));
+
+            if (app.auth().user().isManager() && !id.equals(app.auth().user().getId())){
+                app.set("canDelete", true);
+            } else {
+                app.set("canDelete", false);
+            }
+
+            if (app.auth().user().isManager() || id.equals(app.auth().user().getId())){
+                app.set("canEdit", true);
+            } else {
+                app.set("canEdit", false);
+            }
 
             // Get employee's current department
             app.set("currentDeptName", deService.getCurrentDepartmentName(id));

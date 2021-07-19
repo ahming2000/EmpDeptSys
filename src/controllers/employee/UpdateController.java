@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns = {"/employee/edit", "/employee/update"})
+@WebServlet(urlPatterns = {"/employee/edit", "/employee/update", "/profile/edit", "/profile/update"})
 public class UpdateController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -43,7 +43,7 @@ public class UpdateController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App app = new App(request, response);
 
-        String id = request.getParameter("id");
+        String id = app.param("id", app.auth().user().getId());
         Employee employee = eService.getEmployee(id);
 
         if (employee == null) {
@@ -84,9 +84,9 @@ public class UpdateController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App app = new App(request, response);
 
-        String empId = request.getParameter("id");
+        String empId = app.param("id", app.auth().user().getId());
         String action = request.getParameter("action");
-        String failLink = app.url("/employee/edit?id=" + empId);
+        String failLink = app.auth().user().isManager() ? app.url("/employee/edit?id=" + empId) : app.url("/profile/edit");
 
         // Perform update
         switch (action) {
@@ -116,7 +116,11 @@ public class UpdateController extends HttpServlet {
                     // Set successful message
                     app.setSession("message", "Update profile successfully!");
 
-                    app.redirect("/employee/edit?id=" + empId);
+                    if (app.auth().user().isManager()){
+                        app.redirect("/employee/edit?id=" + empId);
+                    } else {
+                        app.redirect("/profile/edit");
+                    }
                 }
                 break;
 
@@ -158,7 +162,11 @@ public class UpdateController extends HttpServlet {
                 // Set successful message
                 app.setSession("message", "Update department successfully!");
 
-                app.redirect("/employee/edit?id=" + empId);
+                if (app.auth().user().isManager()){
+                    app.redirect("/employee/edit?id=" + empId);
+                } else {
+                    app.redirect("/profile/edit");
+                }
                 break;
 
             default:
