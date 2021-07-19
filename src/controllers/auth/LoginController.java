@@ -35,7 +35,15 @@ public class LoginController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		App app = new App(request, response);
-		app.view("auth/login", "Login");
+		if (app.auth().guest()){
+			app.view("auth/login", "Login");
+		} else {
+			if (app.auth().user().isManager()){
+				app.redirect("/employee");
+			} else {
+				app.redirect("/profile");
+			}
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
