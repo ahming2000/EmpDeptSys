@@ -17,11 +17,13 @@ public class DisplayControl {
     }
 
     public boolean canEditProfile(){
+        if (authUser.getId().equals(empId)) return true;
+
         if (authUser.isManager()){
             if (isManager) return false;
             return authUser.getDeptId().equals(deptId);
         } else {
-            return authUser.getId().equals(empId);
+            return false;
         }
     }
 
