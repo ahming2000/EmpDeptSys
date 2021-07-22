@@ -53,7 +53,7 @@ public class LoginController extends HttpServlet {
 		User user = new User(id, request.getParameter("first_name"), request.getParameter("last_name"));
 
 		if (!app.hasError()) new Required(app).validate(new String[]{"id", "first_name", "last_name"});
-		if (!app.hasError()) new VerifyEmployee(app).validate(eService, user);
+		if (!app.hasError()) new VerifyEmployee(app).validate(eService, deService, user);
 
 		if (!app.hasError()){
 			String currentDeptId = deService.getCurrentDepartmentId(id);
