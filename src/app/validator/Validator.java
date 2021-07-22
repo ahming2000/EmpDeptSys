@@ -2,8 +2,6 @@ package app.validator;
 
 import app.App;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -12,22 +10,16 @@ import java.io.IOException;
 abstract class Validator {
 
     protected final App app;
-    protected final HttpServletRequest request;
-    protected final HttpServletResponse response;
 
     protected String failLink;
 
     public Validator(App app) {
         this.app = app;
-        this.request = app.request;
-        this.response = app.response;
-        this.failLink = request.getRequestURL().toString();
+        this.failLink = app.request.getRequestURL().toString();
     }
 
     public Validator(App app, String failLink){
         this.app = app;
-        this.request = app.request;
-        this.response = app.response;
         this.failLink = failLink;
     }
 
@@ -36,9 +28,9 @@ abstract class Validator {
      */
     protected void end() throws IOException {
         if (app.hasError()){
-            response.sendRedirect(failLink);
+            app.response.sendRedirect(failLink);
         } else {
-            request.getSession().invalidate();
+            app.request.getSession().invalidate();
         }
     }
 
@@ -47,16 +39,16 @@ abstract class Validator {
      */
     protected void end(String[] attributes) throws IOException {
         for (String attribute: attributes){
-            String value = request.getParameter(attribute);
+            String value = app.request.getParameter(attribute);
             if(value != null){
                 app.setOld(attribute, value);
             }
         }
 
         if (app.hasError()){
-            response.sendRedirect(failLink);
+            app.response.sendRedirect(failLink);
         } else {
-            request.getSession().invalidate();
+            app.request.getSession().invalidate();
         }
     }
 

@@ -19,7 +19,7 @@ public class Max extends Validator{
 
     public void validate(String[] attributes, int max) throws IOException {
         for(String attribute: attributes){
-            String value = request.getParameter(attribute);
+            String value = app.request.getParameter(attribute);
             if(value.length() > max){
                 app.setError(attribute, "The " + attribute.replace('_', ' ') + " field must not exceed " + max + " character(s)!");
             }

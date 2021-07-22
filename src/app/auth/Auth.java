@@ -3,7 +3,6 @@ package app.auth;
 import app.App;
 
 import javax.servlet.http.Cookie;
-import java.util.Arrays;
 
 public class Auth {
 
@@ -74,6 +73,5 @@ public class Auth {
         }
         return null;
     }
-
 
 }

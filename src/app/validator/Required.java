@@ -19,7 +19,7 @@ public class Required extends Validator{
 
     public void validate(String[] attributes) throws IOException {
         for (String attribute: attributes){
-            String value = request.getParameter(attribute);
+            String value = app.request.getParameter(attribute);
             if(value != null){
                 if(value.equals("")){
                     app.setError(attribute, "The " + attribute.replace('_', ' ') + " field is required!");
