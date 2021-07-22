@@ -1,27 +1,27 @@
 package app.utility;
 
-import app.auth.AuthUser;
+import app.auth.User;
 
 public class DisplayControl {
 
-    public AuthUser authUser;
+    public User user;
     public String empId;
     public String deptId;
     public boolean isManager;
 
-    public DisplayControl(AuthUser authUser, String empId, String deptId, boolean isManager) {
-        this.authUser = authUser;
+    public DisplayControl(User user, String empId, String deptId, boolean isManager) {
+        this.user = user;
         this.empId = empId;
         this.deptId = deptId;
         this.isManager = isManager;
     }
 
     public boolean canEditProfile(){
-        if (authUser.getId().equals(empId)) return true;
+        if (user.getId().equals(empId)) return true;
 
-        if (authUser.isManager()){
+        if (user.isManager()){
             if (isManager) return false;
-            return authUser.getDeptId().equals(deptId);
+            return user.getDeptId().equals(deptId);
         } else {
             return false;
         }
@@ -29,21 +29,21 @@ public class DisplayControl {
 
     public boolean canChangeDept(boolean isDuplicated){
         if (isDuplicated) return false;
-        if (!authUser.isManager()) return false;
+        if (!user.isManager()) return false;
         return !isManager;
     }
 
     public boolean canMarkResignedRetired(){
-        if (!authUser.isManager()) return false;
+        if (!user.isManager()) return false;
         if (deptId.equals("Resigned/Retired")) return false;
-        if (!authUser.getDeptId().equals(deptId)) return false;
+        if (!user.getDeptId().equals(deptId)) return false;
         return !isManager;
     }
 
     public boolean canDelete(){
-        if (!authUser.isManager()) return false;
+        if (!user.isManager()) return false;
         if (deptId.equals("Resigned/Retired")) return false;
-        if (!authUser.getDeptId().equals(deptId)) return false;
+        if (!user.getDeptId().equals(deptId)) return false;
         return !isManager;
     }
 }

@@ -8,15 +8,15 @@ public class Auth {
 
     private final App app;
 
-    private AuthUser user;
+    private User user;
 
     public Auth(App app) {
         this.app = app;
-        user = initAuthUser();
+        user = initUser();
     }
 
-    private AuthUser initAuthUser(){
-        AuthUser user = new AuthUser();
+    private User initUser(){
+        User user = new User();
 
         Cookie cookie = getCookie();
 
@@ -38,10 +38,10 @@ public class Auth {
         return user == null;
     }
 
-    public void login(AuthUser authUser){
-        this.user = authUser;
+    public void login(User user){
+        this.user = user;
 
-        String line = authUser.getId() + "," + authUser.getFirstName() + "," + authUser.getLastName() + "," + authUser.isManager() + "," + authUser.getDeptId();
+        String line = user.getId() + "," + user.getFirstName() + "," + user.getLastName() + "," + user.isManager() + "," + user.getDeptId();
         Cookie cookie = new Cookie("auth", line);
 
         int AUTH_EXPIRY_DURATION = 60 * 60 * 24; // 24 hours
@@ -58,7 +58,7 @@ public class Auth {
         }
     }
 
-    public AuthUser user(){
+    public User user(){
         return this.user;
     }
 

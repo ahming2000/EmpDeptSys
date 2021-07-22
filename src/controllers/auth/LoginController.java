@@ -1,7 +1,7 @@
 package controllers.auth;
 
 import app.App;
-import app.auth.AuthUser;
+import app.auth.User;
 import app.validator.Required;
 import app.validator.VerifyEmployee;
 import services.DepartmentEmployeeService;
@@ -50,7 +50,7 @@ public class LoginController extends HttpServlet {
 		App app = new App(request, response);
 
 		String id = request.getParameter("id");
-		AuthUser user = new AuthUser(id, request.getParameter("first_name"), request.getParameter("last_name"));
+		User user = new User(id, request.getParameter("first_name"), request.getParameter("last_name"));
 
 		if (!app.hasError()) new Required(app).validate(new String[]{"id", "first_name", "last_name"});
 		if (!app.hasError()) new VerifyEmployee(app).validate(eService, user);

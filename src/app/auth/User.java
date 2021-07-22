@@ -1,6 +1,6 @@
 package app.auth;
 
-public class AuthUser {
+public class User {
 
     private String id;
     private String firstName;
@@ -8,10 +8,10 @@ public class AuthUser {
     private boolean isManager;
     private String deptId;
 
-    public AuthUser() {
+    public User() {
     }
 
-    public AuthUser(String employeeId, String firstName, String lastName) {
+    public User(String employeeId, String firstName, String lastName) {
         this.id = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
