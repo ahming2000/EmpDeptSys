@@ -39,6 +39,9 @@
     <url-pattern>/profile</url-pattern>
     <url-pattern>/employee/view</url-pattern>
     <url-pattern>/employee/edit</url-pattern>
+    <url-pattern>/employee/update</url-pattern>
+    <url-pattern>/profile/edit</url-pattern>
+    <url-pattern>/profile/update</url-pattern>
   </filter-mapping>
 
   <filter>
@@ -50,5 +53,6 @@
     <url-pattern>/employee</url-pattern>
     <url-pattern>/employee/view</url-pattern>
     <url-pattern>/employee/edit</url-pattern>
+    <url-pattern>/employee/update</url-pattern>
   </filter-mapping>
 </web-app>

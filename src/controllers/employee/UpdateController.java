@@ -45,7 +45,7 @@ public class UpdateController extends HttpServlet {
         App app = new App(request, response);
 
         // Get parameter value
-        String empId = app.param("id", app.auth().user().getId()); // Get auth user's id in default
+        String empId = app.auth().user().isManager() ? app.param("id", app.auth().user().getId()) : app.auth().user().getId();
         Employee employee = eService.getEmployee(empId);
 
         if (employee == null) { // If employee not found
