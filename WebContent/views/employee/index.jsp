@@ -24,7 +24,7 @@
 
     <form action="<%= app.url("/employee") %>" method="get" id="filterForm">
         <div class="row mb-3">
-            <div class="col-12 col-md-4 mb-1">
+            <div class="col-12 col-xl-4 mb-1">
                 <select name="paginate" id="paginateSelect" class="form-select w-100">
                     <option value="100" <%= app.paramSelected("paginate", "100") %>>
                         100 records per page
@@ -44,7 +44,7 @@
                 </select>
             </div>
 
-            <div class="col-12 col-md-4 mb-1">
+            <div class="col-12 col-xl-4 mb-1">
                 <select name="department" id="departmentSelect" class="form-select w-100">
                     <option value="">
                         All (<%= app.get("empCount_all") %>)
@@ -58,7 +58,7 @@
                 </select>
             </div>
 
-            <div class="col-12 col-md-4 mb-1 d-flex justify-content-between">
+            <div class="col-12 col-xl-4 mb-1 d-flex justify-content-between">
                 <div class="flex-grow-1 me-2">
                     <input type="text" class="form-control" name="search"
                            placeholder="Search" value="<%= app.param("search", "") %>">

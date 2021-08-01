@@ -2,6 +2,7 @@ package controllers.employee;
 
 import app.App;
 import app.utility.DisplayControl;
+import models.DepartmentEmployee;
 import models.Employee;
 import services.DepartmentEmployeeService;
 import services.DepartmentManagerService;
@@ -9,6 +10,7 @@ import services.DepartmentService;
 import services.EmployeeService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,26 +41,28 @@ public class ReadController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App app = new App(request, response);
 
-        String empId = app.param("id", app.auth().user().getId());
+        // Get parameter value
+        String empId = app.param("id", app.auth().user().getId()); // Get auth user's id in default
         Employee employee = eService.getEmployee(empId);
 
         if (employee == null) { // If the employee id is not found
             app.abort(404);
         } else {
-            // Get involved departments for employee
+            // Get data needed
             String deptId = deService.getCurrentDepartmentId(empId);
+            ArrayList<DepartmentEmployee> deList = deService.getDepartmentsInvolved(empId);
+            String currentDeptName = deService.getCurrentDepartmentName(empId);
             boolean isManager = dmService.isManager(empId, deptId);
 
-            employee.setDepartmentEmployees(deService.getDepartmentsInvolved(empId));
+            // Set data needed
+            employee.setDepartmentEmployees(deList);
             app.set("employee", employee);
-
             app.set("isManager", isManager);
+            app.set("currentDeptName", currentDeptName);
 
+            // Setting up display control
             DisplayControl displayControl = new DisplayControl(app.auth().user(), empId, deptId, isManager);
             app.set("canDelete", displayControl.canDelete());
-
-            // Get employee's current department
-            app.set("currentDeptName", deService.getCurrentDepartmentName(empId));
 
             app.view("employee/view", employee.getFirstName() + " " + employee.getLastName());
         }

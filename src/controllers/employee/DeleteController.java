@@ -21,9 +21,6 @@ public class DeleteController extends HttpServlet {
 	private EmployeeService eService;
 
 	@Inject
-	private DepartmentService dService;
-
-	@Inject
 	private DepartmentEmployeeService deService;
 
     public DeleteController() {

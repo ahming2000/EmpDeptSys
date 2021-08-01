@@ -84,10 +84,10 @@ public class DepartmentEmployee implements Serializable {
 		this.employee = employee;
 	}
 
-	// Custom Getter
+
+	// Custom
 	public boolean isActive() {
 		Date date = new Date();
 		return fromDate.before(date) && toDate.after(date);
 	}
-
 }

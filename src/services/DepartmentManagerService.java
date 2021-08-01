@@ -26,6 +26,7 @@ public class DepartmentManagerService {
     }
 
     public ArrayList<DepartmentManager> getManagerInvolved(String employee_id, String department_id){
+        // Make sure id is parseable to Long datatype
         long employee_id_long;
         try{
             employee_id_long = Long.parseLong(employee_id);

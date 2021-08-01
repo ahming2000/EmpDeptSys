@@ -8,9 +8,5 @@
 		<class>models.DepartmentManager</class>
 		<class>models.DepartmentManagerPK</class>
 		<class>models.Employee</class>
-		<class>models.Salary</class>
-		<class>models.SalaryPK</class>
-		<class>models.Title</class>
-		<class>models.TitlePK</class>
 	</persistence-unit>
 </persistence>

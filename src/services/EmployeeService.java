@@ -33,8 +33,9 @@ public class EmployeeService {
             q.setParameter("start", page * paginate - paginate);
             q.setParameter("paginate", paginate);
             ArrayList<BigInteger> ids = (ArrayList<BigInteger>) q.getResultList();
-            
+
             String idsStr = implodeEmployeeId(ids);
+
             if (idsStr.equals("")){
                 return new ArrayList<>();
             } else {
@@ -46,7 +47,12 @@ public class EmployeeService {
         }
     }
 
+    /**
+     * This function convert all BigInteger to string array list and implode with comma
+     */
     private String implodeEmployeeId(ArrayList<BigInteger> arrayList){
+        if (arrayList.isEmpty()) return "";
+
         ArrayList<String> list = new ArrayList<>();
         for (BigInteger i: arrayList){
             list.add(String.valueOf(i));
@@ -70,7 +76,6 @@ public class EmployeeService {
             return null;
         }
 
-        // Make sure result is found
         try {
             Query q = em.createNamedQuery("Employee.find");
             q.setParameter("id", idL);
@@ -93,7 +98,6 @@ public class EmployeeService {
         try {
             Query q = em.createNativeQuery("SELECT COUNT(DISTINCT e.id) AS count FROM employees.employee e JOIN employees.department_employee de ON e.id = de.employee_id WHERE CONCAT(e.first_name, e.last_name, e.gender) LIKE '%" + search + "%' AND de.department_id LIKE '%" + department + "%'");
             BigInteger count = (BigInteger) q.getSingleResult();
-
             return count.intValue();
         } catch (NoResultException exception) {
             return 0;
@@ -114,6 +118,7 @@ public class EmployeeService {
     }
 
     public boolean isEmployee(String id, String first_name, String last_name){
+        // Make sure id is parseable to Long datatype
         long id_long;
         try{
             id_long = Long.parseLong(id);

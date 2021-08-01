@@ -1,5 +1,8 @@
 package app.auth;
 
+/**
+ * Class for authentication user.
+ */
 public class User {
 
     private String id;

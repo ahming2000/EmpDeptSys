@@ -32,6 +32,7 @@ public class DepartmentEmployeeService {
     }
 
     public ArrayList<DepartmentEmployee> getDepartmentsInvolved(String employee_id) {
+        // Make sure id is parseable to Long datatype
         long employee_id_long;
         try {
             employee_id_long = Long.parseLong(employee_id);
@@ -59,6 +60,7 @@ public class DepartmentEmployeeService {
     }
 
     public boolean isDuplicated(String employee_id, String department_id){
+        // Make sure id is parseable to Long datatype
         long employee_id_long;
         try{
             employee_id_long = Long.parseLong(employee_id);
@@ -86,8 +88,6 @@ public class DepartmentEmployeeService {
             return 0;
         }
     }
-
-
 
     public String getCurrentDepartmentName(String employee_id){
         for(DepartmentEmployee de: getDepartmentsInvolved(employee_id)){
@@ -124,6 +124,7 @@ public class DepartmentEmployeeService {
         DepartmentEmployee de = new DepartmentEmployee();
         de.setEmployee(employee);
         de.setDepartment(department);
+
         try {
             java.util.Date date = new java.util.Date();
             de.setFromDate(new java.sql.Date(date.getTime()));
@@ -132,6 +133,7 @@ public class DepartmentEmployeeService {
             calender.set(9999, Calendar.JANUARY, 1);
             de.setToDate(new java.sql.Date(calender.getTime().getTime()));
         } catch (Exception ignored){}
+
         de.setId(dePK);
 
         em.persist(de);

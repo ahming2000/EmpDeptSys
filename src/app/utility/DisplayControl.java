@@ -2,6 +2,9 @@ package app.utility;
 
 import app.auth.User;
 
+/**
+ * A utility class that help to determine the display for manager or non-manager.
+ */
 public class DisplayControl {
 
     public User user;

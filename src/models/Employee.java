@@ -48,14 +48,6 @@ public class Employee implements Serializable {
 	@OneToMany(mappedBy="employee")
 	private List<DepartmentManager> departmentManagers;
 
-	//bi-directional many-to-one association to Salary
-	@OneToMany(mappedBy="employee")
-	private List<Salary> salaries;
-
-	//bi-directional many-to-one association to Title
-	@OneToMany(mappedBy="employee")
-	private List<Title> titles;
-
 	public Employee() {
 	}
 
@@ -151,51 +143,8 @@ public class Employee implements Serializable {
 		return departmentManager;
 	}
 
-	public List<Salary> getSalaries() {
-		return this.salaries;
-	}
 
-	public void setSalaries(List<Salary> salaries) {
-		this.salaries = salaries;
-	}
-
-	public Salary addSalary(Salary salary) {
-		getSalaries().add(salary);
-		salary.setEmployee(this);
-
-		return salary;
-	}
-
-	public Salary removeSalary(Salary salary) {
-		getSalaries().remove(salary);
-		salary.setEmployee(null);
-
-		return salary;
-	}
-
-	public List<Title> getTitles() {
-		return this.titles;
-	}
-
-	public void setTitles(List<Title> titles) {
-		this.titles = titles;
-	}
-
-	public Title addTitle(Title title) {
-		getTitles().add(title);
-		title.setEmployee(this);
-
-		return title;
-	}
-
-	public Title removeTitle(Title title) {
-		getTitles().remove(title);
-		title.setEmployee(null);
-
-		return title;
-	}
-
-	// Custom Getter
+	// Custom
 	public String getFullName() {
 		return firstName + " " + lastName;
 	}
@@ -209,5 +158,4 @@ public class Employee implements Serializable {
 			return "Other";
 		}
 	}
-
 }

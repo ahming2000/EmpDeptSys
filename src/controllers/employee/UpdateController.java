@@ -44,31 +44,30 @@ public class UpdateController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App app = new App(request, response);
 
-        String empId = app.param("id", app.auth().user().getId());
+        // Get parameter value
+        String empId = app.param("id", app.auth().user().getId()); // Get auth user's id in default
         Employee employee = eService.getEmployee(empId);
 
-        if (employee == null) {
+        if (employee == null) { // If employee not found
             app.abort(404);
         } else {
+            // Get data needed
             String deptId = deService.getCurrentDepartmentId(empId);
+            String deptName = deService.getCurrentDepartmentName(empId);
             boolean isManager = dmService.isManager(empId, deptId);
             boolean empHasAuthUserDept = deService.isDuplicated(empId, app.auth().user().getDeptId());
 
             app.set("employee", employee);
+            app.set("isManager", isManager);
 
-            // Get employee's current department
-            app.set("currentDeptId", deService.getCurrentDepartmentId(empId));
-            app.set("currentDeptName", deService.getCurrentDepartmentName(empId));
+            // Get employee's current department name
+            app.set("currentDeptName", deptName);
 
             // Check if the auth user is department's manager or not
             app.set("authUserDeptName", dService.getDepartment(app.auth().user().getDeptId()).getDeptName());
 
-            // Get all departments
-            ArrayList<Department> departments = dService.getAllDepartments();
-            app.set("departments", departments);
 
-            app.set("isManager", isManager);
-
+            // Setting up display control
             DisplayControl displayControl = new DisplayControl(app.auth().user(), empId, deptId, isManager);
             app.set("canEditProfile", displayControl.canEditProfile());
             app.set("canChangeDept", displayControl.canChangeDept(empHasAuthUserDept));
@@ -82,19 +81,21 @@ public class UpdateController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App app = new App(request, response);
 
-        String empId = app.param("id", app.auth().user().getId());
+        // Get parameter value
+        String empId = app.param("id", app.auth().user().getId()); // Get auth user's id in default
         String action = request.getParameter("action");
         String failLink = app.auth().user().isManager() ? app.url("/employee/edit?id=" + empId) : app.url("/profile/edit");
 
         // Perform update
         switch (action) {
             case "profile":
+
                 // Server side validation
-                if (!app.hasError())
-                    new Required(app, failLink).validate(new String[]{"first_name", "last_name", "gender", "birth_date"});
+                if (!app.hasError()) new Required(app, failLink).validate(new String[]{"first_name", "last_name", "gender", "birth_date"});
                 if (!app.hasError()) new Max(app, failLink).validate(new String[]{"first_name"}, 14);
                 if (!app.hasError()) new Max(app, failLink).validate(new String[]{"last_name"}, 16);
 
+                // Perform profile update
                 if (!app.hasError()) {
                     Employee employee = eService.getEmployee(empId);
 
@@ -114,6 +115,7 @@ public class UpdateController extends HttpServlet {
                     // Set successful message
                     app.setSession("message", "Update profile successfully!");
 
+                    // Redirect to respective url
                     if (app.auth().user().isManager()){
                         app.redirect("/employee/edit?id=" + empId);
                     } else {
@@ -123,14 +125,17 @@ public class UpdateController extends HttpServlet {
                 break;
 
             case "department":
+
+                // Receive action for department update
                 String subAction = request.getParameter("subAction");
 
                 switch (subAction) {
                     case "changeToAuthUserDept":
 
                         if (!app.auth().user().getDeptId().equals("Resigned/Retired")) {
-                            Department currentAuthUserDept = dService.getDepartment(app.auth().user().getDeptId());
 
+                            // Get data needed
+                            Department currentAuthUserDept = dService.getDepartment(app.auth().user().getDeptId());
                             String currentDeptId = deService.getCurrentDepartmentId(empId);
                             Employee employee = eService.getEmployee(empId);
                             Department department = dService.getDepartment(currentAuthUserDept.getId());
@@ -149,7 +154,7 @@ public class UpdateController extends HttpServlet {
                         break;
 
                     case "markAsResignRetired":
-                        if (!app.auth().user().getDeptId().equals("Resigned/Retired")) {
+                        if (!app.auth().user().getDeptId().equals("Resigned/Retired")) { // Make sure the employee's department is not resigned or retired
                             deService.updateDepartmentEmployee(empId, new SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())); // Set date now to current department toDate
                         }
                         break;
@@ -160,6 +165,7 @@ public class UpdateController extends HttpServlet {
                 // Set successful message
                 app.setSession("message", "Update department successfully!");
 
+                // Redirect to respective url
                 if (app.auth().user().isManager()){
                     app.redirect("/employee/edit?id=" + empId);
                 } else {
@@ -168,7 +174,6 @@ public class UpdateController extends HttpServlet {
                 break;
 
             default:
-                app.redirect("/employee");
         }
     }
 

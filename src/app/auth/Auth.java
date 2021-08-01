@@ -4,6 +4,9 @@ import app.App;
 
 import javax.servlet.http.Cookie;
 
+/**
+ * Simple authentication class.
+ */
 public class Auth {
 
     private final App app;
@@ -15,6 +18,9 @@ public class Auth {
         user = initUser();
     }
 
+    /**
+     * Extract the login user information.
+     */
     private User initUser(){
         User user = new User();
 
@@ -34,10 +40,16 @@ public class Auth {
         }
     }
 
+    /**
+     * Return has user login or not.
+     */
     public boolean guest(){
         return user == null;
     }
 
+    /**
+     * Login the user by storing the information to Cookie. No authenticate verification occurred here.
+     */
     public void login(User user){
         this.user = user;
 
@@ -58,10 +70,9 @@ public class Auth {
         }
     }
 
-    public User user(){
-        return this.user;
-    }
-
+    /**
+     * Get authentication information with Cookie which named as "auth".
+     */
     private Cookie getCookie(){
         Cookie[] cookies = app.request.getCookies();
         if (cookies == null) return null;
@@ -72,6 +83,13 @@ public class Auth {
             }
         }
         return null;
+    }
+
+    /**
+     * Get the current login user, return null when there is no user login.
+     */
+    public User user(){
+        return this.user;
     }
 
 }

@@ -39,22 +39,25 @@ public class IndexController extends HttpServlet {
         String search = app.param("search", "");
         String department = app.param("department", "");
 
-        // Get total employee count
-        app.set("empCount_all", eService.getEmployeeCount());
-
+        /* Get Supporting Information */
         // Get all departments
         ArrayList<Department> departments = dService.getAllDepartments();
         app.set("departments", departments);
+
+        // Get total employee count
+        app.set("empCount_all", eService.getEmployeeCount());
 
         // Get all departments' employee count
         for (Department dept : departments) {
             app.set("empCount_" + dept.getId(), deService.getEmployeeCount(dept.getId()));
         }
 
-        // Setup pagination
+        // Setting up pagination
         int maxPage = (int) Math.ceil((double) eService.getEmployeeCount(search, department) / paginate);
         app.set("maxPage", maxPage);
 
+
+        /* Get Primary Information */
         // Get filtered employees
         ArrayList<Employee> employees = eService.getEmployees(page, paginate, search, department);
         app.set("employees", employees);
@@ -63,8 +66,6 @@ public class IndexController extends HttpServlet {
             String deptId = deService.getCurrentDepartmentId(employee.getId().toString());
             app.set("deptId_" + employee.getId().toString(), deptId);
         }
-
-
 
         app.view("employee/index", "Employee Manage");
     }

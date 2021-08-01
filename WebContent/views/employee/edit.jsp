@@ -1,10 +1,7 @@
 <%@ page import="app.App" %>
 <%@ page import="models.Employee" %>
-<%@ page import="models.Department" %>
-<%@ page import="java.util.ArrayList" %>
 <% App app = (App) request.getAttribute("app"); %>
 <% Employee employee = (Employee) app.get("employee"); %>
-<% @SuppressWarnings("unchecked") ArrayList<Department> departments = (ArrayList<Department>) app.get("departments"); %>
 
 <div class="container" id="app">
     <div class="row">
