@@ -1,9 +1,12 @@
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<%@ page import="app.App" %>
+<% App app = (App) request.getAttribute("app"); %>
+
+<link href="<%= app.url("/css/bootstrap.min.css") %>" rel="stylesheet">
 
 <style>
     @font-face {
         font-family: "Nunito";
-        src: url("font/Nunito/Nunito-Regular.ttf") format("truetype");
+        src: url("<%= app.url("/font/Nunito/Nunito-Regular.ttf") %>") format("truetype");
     }
 
     body {
