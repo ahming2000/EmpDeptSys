@@ -26,9 +26,6 @@ public class ReadController extends HttpServlet {
     private EmployeeService eService;
 
     @Inject
-    private DepartmentService dService;
-
-    @Inject
     private DepartmentEmployeeService deService;
 
     @Inject
