@@ -161,15 +161,3 @@
         </div>
     </div>
 </div>
-
-<script>
-
-    $('#hasResignedRetiredCheckBox').on('click', function () {
-        let deptNameSelect = $('#input_deptName');
-        if (deptNameSelect.is(':disabled')) {
-            deptNameSelect.prop("disabled", false);
-        } else {
-            deptNameSelect.prop("disabled", true);
-        }
-    });
-</script>
